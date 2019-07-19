@@ -1,17 +1,21 @@
-<html>
-    <head>
-        <title>今井浩之の告白</title>
-    </head>
-    <body>
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% for post in posts %}
         <div>
-            <h1><a href="/">DjangoテストBlog</a></h1>
+            <p>published: {{ post.published_date }}</p>
+            <h1><a href="">{{ post.title }}</a></h1>
+            <p>{{ post.text|linebreaksbr }}</p>
         </div>
-        
-        {% for post in posts %}
-            <div>
-                <p>published: {{ post.published_date }}</p>
-                <h1><a href="">{{ post.title }}</a></h1>
-                <p>{{ post.text|linebreaksbr }}</p>
-            </div>
-        {% endfor %}    </body>
-</html>
+        <hr>
+        {% for comment in post.comments.all %}
+            {% if comment.approved_comment %}
+                <div class="comment">
+                    <div class="date">{{ comment.created_date }}</div>
+                    <strong>{{ comment.author }}</strong>
+                    <p>{{ comment.text|linebreaks }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endfor %}
+{% endblock %}
